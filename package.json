@@ -1,0 +1,23 @@
+{
+  "name": "lab5",
+  "version": "1.0.0",
+  "main": "eslint.config.js",
+  "type": "module",
+  "scripts": {
+    "test": "jest",
+    "test:cov": "jest --coverage"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "eslint": "^9.39.1",
+    "globals": "^16.5.0",
+    "jest": "^29.7.0"
+  },
+  "dependencies": {
+    "sonar-scanner": "^3.1.0"
+  }
+}
