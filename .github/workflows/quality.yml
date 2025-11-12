@@ -106,48 +106,50 @@ jobs:
           path: java/target/site/jacoco/jacoco.xml
 
   sonarqube-analysis:
-      name: SonarCloud Analysis
-      runs-on: ubuntu-latest
-      needs: [python-quality, javascript-quality, java-quality]
-      steps:
-        - uses: actions/checkout@v4
-          with:
-            fetch-depth: 0
+    name: SonarCloud Analysis
+    runs-on: ubuntu-latest
+    needs: [python-quality, javascript-quality, java-quality]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-        - name: Download Python coverage  
-          uses: actions/download-artifact@v4  
-          with:
-            name: python-coverage
+      - name: Download Python coverage  
+        uses: actions/download-artifact@v4  
+        with:
+          name: python-coverage
 
-        - name: Download JS coverage  
-          uses: actions/download-artifact@v4  
-          with:
-            name: js-coverage
-          if: always()
+      - name: Download JS coverage  
+        uses: actions/download-artifact@v4  
+        with:
+          name: js-coverage
+        if: always()
 
-        - name: Download Java coverage  
-          uses: actions/download-artifact@v4  
-          with:
-            name: java-coverage
-          if: always()
+      - name: Download Java coverage  
+        uses: actions/download-artifact@v4  
+        with:
+          name: java-coverage
+        if: always()
 
-        - name: SonarCloud Scan
-          uses: sonarsource/sonarcloud-scan-action@v3
-          env:
-            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          with:
-            args: >
-              -Dsonar.organization=${{ secrets.SONAR_ORG }}
-              -Dsonar.projectKey=lab5-multilang
-              -Dsonar.sources=flask_app.py,src,java/src/main/java
-              -Dsonar.tests=tests,java/src/test/java
-              -Dsonar.python.coverage.reportPaths=coverage.xml
-              -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
-              -Dsonar.coverage.jacoco.xmlReportPaths=java/target/site/jacoco/jacoco.xml
-              -Dsonar.java.binaries=java/target/classes
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarqube-scan-action@v4.1.0  
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.organization=${{ secrets.SONAR_ORG }}
+            -Dsonar.projectKey=lab5-multilang
+            -Dsonar.sources=flask_app.py,src,java/src/main/java
+            -Dsonar.tests=tests,java/src/test/java
+            -Dsonar.python.coverage.reportPaths=coverage.xml
+            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+            -Dsonar.coverage.jacoco.xmlReportPaths=java/target/site/jacoco/jacoco.xml
+            -Dsonar.java.binaries=java/target/classes
 
-        - name: Quality Gate Check
-          uses: SonarSource/sonarcloud-quality-gate-action@v2
-          timeout-minutes: 5
-          env:
-            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: Quality Gate Check
+        uses: SonarSource/sonarqube-quality-gate-action@v1 
+        timeout-minutes: 5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          scanMetadataReportFile: .scannerwork/report-task.txt
