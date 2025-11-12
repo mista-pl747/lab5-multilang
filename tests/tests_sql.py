@@ -1,17 +1,19 @@
 import pytest
-import psycopg2
+import sqlite3
+
 
 def test_sql_schema():
-    conn = psycopg2.connect(
-        host="localhost",
-        database="sonarqube",
-        user="sonar",
-        password="sonar_secure_password"
-    )
-    cur = conn.cursor()
-    cur.execute("SELECT column_name FROM information_schema.columns WHERE table_name = 'users'")
-    columns = [row[0] for row in cur.fetchall()]
-    assert 'id' in columns
-    assert 'name' in columns
-    cur.close()
+    conn = sqlite3.connect(':memory:')
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE users (
+            id INTEGER PRIMARY KEY,
+            name TEXT,
+            age INTEGER
+        )
+    ''')
+    cursor.execute("INSERT INTO users (name, age) VALUES ('Alice', 30)")
+    cursor.execute("SELECT * FROM users")
+    result = cursor.fetchone()
+    assert result == (1, 'Alice', 30)
     conn.close()

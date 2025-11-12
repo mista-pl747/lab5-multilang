@@ -1,6 +1,7 @@
 import pytest
 from app import app, process_user_data
 
+
 @pytest.fixture
 def client():
     app.config['TESTING'] = True
