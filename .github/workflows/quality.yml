@@ -47,22 +47,39 @@ jobs:
             path: |
               coverage.xml
               htmlcov/
-              
+
   javascript-quality:
     name: JavaScript Lint & Tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Node
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-      - name: Install JS deps
-        run: npm ci  
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install JS dependencies
+        run: |
+          npm ci  # Вимагає package-lock.json
+
       - name: Lint with ESLint
-        run: npx eslint src/ || true
-      - name: Run JS tests
-        run: npm test -- --coverage --coverageReporters=lcov
+        run: |
+          npx eslint src/ --format json --output-file eslint-report.json || true
+          npx eslint src/
+
+      - name: Run JS tests with coverage
+        run: |
+          npm test -- --coverage --coverageReporters=lcov
+
+      - name: Upload JS coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: js-coverage
+          path: coverage/
 
   java-quality:
     name: Java Lint & Tests
