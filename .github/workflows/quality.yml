@@ -133,7 +133,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: java-coverage
-        if: always()
+        if: always() 
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@master 
@@ -157,3 +157,4 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: https://sonarcloud.io
+          
