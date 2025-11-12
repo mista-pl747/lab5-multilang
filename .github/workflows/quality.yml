@@ -39,10 +39,10 @@ jobs:
 
       - name: Run Python tests with coverage
         run: |
-          pytest tests/ --cov=app --cov-report=xml:coverage.xml --cov-report=html:htmlcov
+          pytest tests/ --cov=flask_app --cov-report=xml:coverage.xml --cov-report=html:htmlcov
 
-      - name: Upload Python coverage
-        uses: actions/upload-artifact@v3
+      - name: Upload Python coverage  
+        uses: actions/upload-artifact@v4  
         with:
           name: python-coverage
           path: |
@@ -74,8 +74,8 @@ jobs:
       - name: Run JS tests with coverage
         run: npm test -- --coverage --coverageReporters=lcov
 
-      - name: Upload JS coverage
-        uses: actions/upload-artifact@v3
+      - name: Upload JS coverage  
+        uses: actions/upload-artifact@v4 
         with:
           name: js-coverage
           path: coverage/
@@ -98,8 +98,8 @@ jobs:
       - name: Build Java with Maven
         run: cd java && mvn -B clean test jacoco:report
 
-      - name: Upload Java coverage
-        uses: actions/upload-artifact@v3
+      - name: Upload Java coverage  
+        uses: actions/upload-artifact@v4  
         with:
           name: java-coverage
           path: java/target/site/jacoco/jacoco.xml
@@ -113,19 +113,19 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Download Python coverage
-        uses: actions/download-artifact@v3
+      - name: Download Python coverage  
+        uses: actions/download-artifact@v4  
         with:
           name: python-coverage
 
-      - name: Download JS coverage
-        uses: actions/download-artifact@v3
+      - name: Download JS coverage  
+        uses: actions/download-artifact@v4  
         with:
           name: js-coverage
         if: always()
 
-      - name: Download Java coverage
-        uses: actions/download-artifact@v3
+      - name: Download Java coverage  
+        uses: actions/download-artifact@v4  
         with:
           name: java-coverage
         if: always()
@@ -138,7 +138,7 @@ jobs:
         with:
           args: >
             -Dsonar.projectKey=lab5-multilang
-            -Dsonar.sources=app.py,src,java/src/main/java
+            -Dsonar.sources=flask_app.py,src,java/src/main/java
             -Dsonar.tests=tests,java/src/test/java
             -Dsonar.python.coverage.reportPaths=coverage.xml
             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
