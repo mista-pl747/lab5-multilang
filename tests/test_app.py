@@ -1,5 +1,5 @@
 import pytest
-from app import app, process_user_data
+from flask_app import app, process_user_data
 
 
 @pytest.fixture
