@@ -143,7 +143,7 @@ jobs:
         with:
           args: >
             -Dsonar.organization=${{ secrets.SONAR_ORG }}
-            -Dsonar.projectKey=lab5-multilang
+            -Dsonar.projectKey=${{ secrets.SONAR_ORG }}_lab5-multilang
             -Dsonar.sources=flask_app.py,src,java/src/main/java
             -Dsonar.tests=tests,java/src/test/java
             -Dsonar.python.coverage.reportPaths=coverage.xml
