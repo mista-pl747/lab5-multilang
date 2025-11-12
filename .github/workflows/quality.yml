@@ -135,6 +135,15 @@ jobs:
           name: java-coverage
         if: always() 
 
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v5
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'temurin'
+
+      - name: Compile Java for Sonar
+        run: cd java && mvn -B compile
+      
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@master 
         env:
@@ -157,4 +166,3 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: https://sonarcloud.io
-          
