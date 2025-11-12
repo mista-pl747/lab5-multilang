@@ -138,7 +138,7 @@ jobs:
           SONAR_HOST_URL: https://sonarcloud.io  
         with:
           args: >
-            -Dsonar.organization=${{ secrets.SONAR_ORG }}
+            -Dsonar.organization=${{ secrets.SONAR_ORG }}  
             -Dsonar.projectKey=lab5-multilang
             -Dsonar.sources=flask_app.py,src,java/src/main/java
             -Dsonar.tests=tests,java/src/test/java
@@ -152,4 +152,4 @@ jobs:
         timeout-minutes: 5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_HOST_URL: https://sonarcloud.io
